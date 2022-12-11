@@ -8,7 +8,7 @@ import { AboutPage } from './pages/AboutPage';
 const App: React.FC = () => {
   return <>
     <Navbar />
-    <div className='container'>
+    <div className='container m-auto'>
       <Routes>
         <Route path='/' element={<TodosPage />} />
         <Route path='/about' element={<AboutPage />} />

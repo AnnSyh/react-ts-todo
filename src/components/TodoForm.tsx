@@ -26,15 +26,13 @@ export const TodoForm: React.FC<TodoFormProps> = props => {
       <input
         // onChange={changeHandler}
         // value={title}
+        className='border py-2 px-4 mb-4 mt-4 w-full outline-0'
         ref={ref}
         type="text"
         id="title"
-        placeholder="Введите название дела"
+        placeholder="Введите название дела нажмите Enter"
         onKeyPress={keyPressHandler}
       />
-      <label htmlFor="title" className="active">
-        Введите название дела
-      </label>
     </div>
   )
 }

@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { TodoForm } from '../components/TodoForm'
 import { TodoList } from '../components/TodoList'
+import { RemoveConfirm } from '../components/RemoveConfirm'
 import { ITodo } from '../interfaces'
+
+import { Modal } from '../components/Modal'
+import { ModalContext } from '../context/ModalContext'
 
 declare var confirm: (question: string) => boolean
 
 export const TodosPage: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([])
+
+  let deleteFunc = useRef(null)
+
+  const { modal, open, close, clickedTodoId } = useContext(ModalContext);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('todos') || '[]') as ITodo[]
@@ -23,7 +31,6 @@ export const TodosPage: React.FC = () => {
       id: Date.now(),
       completed: false
     }
-    // setTodos([newTodo, ...todos])
     setTodos(prev => [newTodo, ...prev])
   }
 
@@ -32,35 +39,75 @@ export const TodosPage: React.FC = () => {
       prev.map(todo => {
         if (todo.id === id) {
           todo.completed = !todo.completed  // если включен StrictMode в index.tsx то работать не будет
-
-          // если выкючит StrictMode в index.tsx то так
-          // return {
-          //   ...todo,
-          //   completed: !todo.completed
-          // }
         }
-        console.log('return todo = ', todo);
         return todo
       })
     )
   }
 
   const removeHandler = (id: number) => {
-    const shoudRemove = confirm('Вы уверены, что хотите удалить элемент?')
-    if (shoudRemove) {
-      setTodos(prev => prev.filter(todo => todo.id !== id))
-    }
+    console.log(' click Trash: removeHandler: id =', id);
+    open()
+
+    // const shoudRemove = confirm('Вы уверены, что хотите удалить элемент?')
+    // if (shoudRemove) {
+    //   setTodos(prev => prev.filter(todo => todo.id !== id))
+    // }
   }
 
+  const clickYesHandler = (id: number) => {
+    console.log('clickYesHandler: id =', id);
+
+    let newModel = [...todos]
+    newModel.splice(id, 1)
+    setTodos(newModel)
+
+  }
+
+
   return (
-    <React.Fragment>
+    <>
       <TodoForm onAdd={addHandler} />
+
+      <button
+        onClick={() => open()}
+      >Открыть мод окно</button>
 
       <TodoList
         todos={todos}
         onToggle={toggleHandler}
         onRemove={removeHandler}
       />
-    </React.Fragment>
+
+      {modal && <Modal
+        title='Вы уверены, что хотите удалить элемент?'
+        onClose={() => close()}
+      >
+
+        <h1>Вы уверены?</h1>
+        <div className='flex m-4'>
+          <button
+            className='m-auto block justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+            onClick={() => clickYesHandler(0)}
+          >
+            Yes
+          </button>
+          <button
+            className='m-auto block justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+            onClick={() => close()}
+          >
+            No
+          </button>
+        </div>
+
+
+        {/* <RemoveConfirm
+          onToggle={toggleHandler}
+          onRemove={removeHandler}
+          clickedTodoId={clickedTodoId}
+        /> */}
+      </Modal>}
+
+    </>
   )
 }
