@@ -4,14 +4,12 @@ interface IModalContext {
   modal: boolean
   open: () => void
   close: () => void
-  clickedTodoId: number
 }
 
 export const ModalContext = createContext<IModalContext>({
   modal: false,
   open: () => { },
   close: () => { },
-  clickedTodoId: 0,
 })
 
 export const useModal = () => {
@@ -25,7 +23,6 @@ export const ModalState = ({ children }: { children: React.ReactNode }) => {
 
   const close = () => setModal(false)
 
-  const clickedTodoId = 1670496325454
 
 
 
@@ -34,7 +31,6 @@ export const ModalState = ({ children }: { children: React.ReactNode }) => {
       modal,
       open,
       close,
-      clickedTodoId
     }}>
       {children}
     </ModalContext.Provider>
