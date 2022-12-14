@@ -78,6 +78,17 @@ export const TodosPage: React.FC = () => {
     <>
       <TodoForm onAdd={addHandler} />
 
+      <div className='flex m-4'>
+        <button
+          className='btn-primary'
+          onClick={() => {
+            console.log('click удалить все');
+            { setTodos([]) }
+          }}
+        > удалить все
+        </button>
+      </div>
+
       {modal && <Modal
         title='Вы уверены, что хотите удалить'
         onClose={() => close()}
