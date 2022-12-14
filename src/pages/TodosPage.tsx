@@ -69,7 +69,7 @@ export const TodosPage: React.FC = () => {
           title='Вы уверены, что хотите удалить'
           onClose={() => close()}
         >
-          <p className='flex justify-center py-4'>элемент {clickedItemTitle} c id = {clickedItemId} ?</p>
+          <p className='flex justify-center py-4'>элемент <span className='text-blue-600 px-4'>{clickedItemTitle}</span> c <span className='text-blue-600 px-4'>id = {clickedItemId}</span> ?</p>
           <div className='flex m-4'>
             <button
               className='btn-primary'
@@ -102,10 +102,10 @@ export const TodosPage: React.FC = () => {
                       checked={todo.completed}
                       onChange={toggleHandler.bind(null, todo.id)}
                     />
-                    <span>{todo.title}</span>
+                    <span className='todo-title'>{todo.title}</span>
                   </span>
                   <i
-                    className="material-icons red-text"
+                    className="material-icons hover:text-red-500"
                     onClick={() => passItemId(todo.id, todo.title)}
                   // onClick={() => onRemove(todo.id)}
                   >

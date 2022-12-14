@@ -10,7 +10,7 @@
     @apply mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500;
   }
   .todo-label {
-    @apply w-full flex justify-between mt-4 mb-4;
+    @apply w-full flex justify-between mt-4 mb-4 hover:cursor-pointer;
   }
   .modal-bg {
     @apply fixed bg-black/[0.5] top-0 right-0 left-0 bottom-0;
@@ -18,4 +18,11 @@
   .modal-item {
     @apply w-[500px] p-5 rounded bg-white fixed  left-1/2 -translate-x-1/2;
   }
+  .todo {
+    @apply flex justify-between bg-white px-2 py-2 my-5 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:rounded-lg sm:px-10 hover:cursor-pointer;
+  }
+}
+
+.completed .todo-title {
+  text-decoration: line-through;
 }
