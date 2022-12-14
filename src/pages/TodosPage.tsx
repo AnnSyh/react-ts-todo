@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
+
 import { TodoForm } from '../components/TodoForm'
-// import { TodoList } from '../components/TodoList'
-// import { RemoveConfirm } from '../components/RemoveConfirm'
+import { TodoList } from '../components/TodoList'
+import { Modal } from '../components/Modal'
+import { ModalConfirm } from '../components/ModalConfirm'
+
+import { ModalContext } from '../context/ModalContext'
+
 import { ITodo } from '../interfaces'
 
-import { Modal } from '../components/Modal'
-import { ModalContext } from '../context/ModalContext'
 
 export const TodosPage: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([])
@@ -56,69 +59,42 @@ export const TodosPage: React.FC = () => {
     close()
   }
 
-  console.log(' TodosPage: clickedItem id =', clickedItemId);
-  console.log(' TodosPage: clickedItem title =', clickedItemTitle);
-  console.log(' TodosPage: Todos =', todos);
+  // console.log(' TodosPage: clickedItem id =', clickedItemId);
+  // console.log(' TodosPage: clickedItem title =', clickedItemTitle);
+  // console.log(' TodosPage: Todos =', todos);
 
+
+  //когда дел нет
+  if (todos.length === 0) {
+    return (
+      <>
+        <TodoForm onAdd={addHandler} />
+        <p className="center">Пока дел нет!</p>
+      </>
+    )
+  }
+  //когда дела есть
   return (
     <>
       <TodoForm onAdd={addHandler} />
 
-      <>
-        {modal && <Modal
-          title='Вы уверены, что хотите удалить'
-          onClose={() => close()}
-        >
-          <p className='flex justify-center py-4'>элемент <span className='text-blue-600 px-4'>{clickedItemTitle}</span> c <span className='text-blue-600 px-4'>id = {clickedItemId}</span> ?</p>
-          <div className='flex m-4'>
-            <button
-              className='btn-primary'
-              onClick={() => removeHandler(clickedItemId)}
-            > Yes
-            </button>
-            <button
-              className='btn-primary'
-              onClick={() => close()}
-            > No
-            </button>
-          </div>
+      {modal && <Modal
+        title='Вы уверены, что хотите удалить'
+        onClose={() => close()}
+      >
+        <ModalConfirm
+          clickedItemId={clickedItemId}
+          clickedItemTitle={clickedItemTitle}
+          removeHandler={removeHandler}
+        />
+      </Modal>}
 
-        </Modal>}
-
-        <ul>
-          {todos.map((todo) => {
-            const classes = ['todo']
-            if (todo.completed) {
-              classes.push('completed')
-            }
-
-            return (
-              <li className={classes.join(' ')} key={todo.id}>
-                <label className='todo-label'>
-                  <span className='flex items-center'>
-                    <input
-                      className='input-primary'
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={toggleHandler.bind(null, todo.id)}
-                    />
-                    <span className='todo-title'>{todo.title}</span>
-                  </span>
-                  <i
-                    className="material-icons hover:text-red-500"
-                    onClick={() => passItemId(todo.id, todo.title)}
-                  // onClick={() => onRemove(todo.id)}
-                  >
-                    delete
-                  </i>
-                </label>
-              </li>
-            )
-          })}
-        </ul>
-      </>
-
-
+      <TodoList
+        todos={todos}
+        onToggle={toggleHandler}
+        passItemId={passItemId}
+        toggleHandler={toggleHandler}
+      />
 
     </>
   )
