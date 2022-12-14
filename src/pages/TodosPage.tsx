@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { TodoForm } from '../components/TodoForm'
-import { TodoList } from '../components/TodoList'
-import { RemoveConfirm } from '../components/RemoveConfirm'
+// import { TodoList } from '../components/TodoList'
+// import { RemoveConfirm } from '../components/RemoveConfirm'
 import { ITodo } from '../interfaces'
 
 import { Modal } from '../components/Modal'
 import { ModalContext } from '../context/ModalContext'
 
-declare var confirm: (question: string) => boolean
-
 export const TodosPage: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([])
 
-  const [clickedId, setClickedId] = useState(0);
-
-  let deleteFunc = useRef(null)
+  const [clickedItemId, setclickedItemId] = useState(0);
+  const [clickedItemTitle, setclickedItemTitle] = useState('');
 
   const { modal, open, close } = useContext(ModalContext);
 
@@ -47,23 +44,20 @@ export const TodosPage: React.FC = () => {
     )
   }
 
-  const removeHandler = (id: number) => {
-    console.log('!!!!')
+  const passItemId = (id: number, title: string) => {
     open()
-    setClickedId(id)
+    setclickedItemId(id)
+    setclickedItemTitle(title)
 
-    // const shoudRemove = confirm('Вы уверены, что хотите удалить элемент?')
-    // if (shoudRemove) {
-    //   setTodos(prev => prev.filter(todo => todo.id !== id))
-    // }
   }
 
-  const clickYesHandler = (id: number) => {
-    console.log('clickYesHandler: id =', id);
+  const removeHandler = (id: number) => {
     setTodos(prev => prev.filter(todo => todo.id !== id))
+    close()
   }
 
-  console.log(' TodosPage: clicked id =', clickedId);
+  console.log(' TodosPage: clickedItem id =', clickedItemId);
+  console.log(' TodosPage: clickedItem title =', clickedItemTitle);
   console.log(' TodosPage: Todos =', todos);
 
   return (
@@ -72,24 +66,20 @@ export const TodosPage: React.FC = () => {
 
       <>
         {modal && <Modal
-          title='Вы уверены, что хотите удалить элемент?'
+          title='Вы уверены, что хотите удалить'
           onClose={() => close()}
         >
-
-          <h1>Вы уверены?</h1>
+          <p className='flex justify-center py-4'>элемент {clickedItemTitle} c id = {clickedItemId} ?</p>
           <div className='flex m-4'>
             <button
-              className='m-auto block justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-              // onClick={() => clickYesHandler(0)}
-              onClick={() => clickYesHandler(clickedId)}
-            >
-              Yes
+              className='btn-primary'
+              onClick={() => removeHandler(clickedItemId)}
+            > Yes
             </button>
             <button
-              className='m-auto block justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+              className='btn-primary'
               onClick={() => close()}
-            >
-              No
+            > No
             </button>
           </div>
 
@@ -104,10 +94,10 @@ export const TodosPage: React.FC = () => {
 
             return (
               <li className={classes.join(' ')} key={todo.id}>
-                <label className='w-full flex justify-between align-center mt-4 mb-4'>
-                  <span className='flex center'>
+                <label className='todo-label'>
+                  <span className='flex items-center'>
                     <input
-                      className='mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
+                      className='input-primary'
                       type="checkbox"
                       checked={todo.completed}
                       onChange={toggleHandler.bind(null, todo.id)}
@@ -116,9 +106,7 @@ export const TodosPage: React.FC = () => {
                   </span>
                   <i
                     className="material-icons red-text"
-                    onClick={() => {
-                      removeHandler(todo.id)
-                    }}
+                    onClick={() => passItemId(todo.id, todo.title)}
                   // onClick={() => onRemove(todo.id)}
                   >
                     delete

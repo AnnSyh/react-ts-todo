@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply m-auto block justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+  }
+  .input-primary {
+    @apply mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500;
+  }
+  .todo-label {
+    @apply w-full flex justify-between mt-4 mb-4;
+  }
+  .modal-bg {
+    @apply fixed bg-black/[0.5] top-0 right-0 left-0 bottom-0;
+  }
+  .modal-item {
+    @apply w-[500px] p-5 rounded bg-white fixed  left-1/2 -translate-x-1/2;
+  }
+}
