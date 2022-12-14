@@ -5,6 +5,7 @@ type ModalConfirmProps = {
   clickedItemId: number,
   clickedItemTitle: string,
   removeHandler: (id: number) => void
+  removeHandlerAll?: () => void
 }
 
 export const ModalConfirm = (props: ModalConfirmProps) => {
@@ -12,6 +13,22 @@ export const ModalConfirm = (props: ModalConfirmProps) => {
 
   // console.log('ModalConfirm clickedItemId = ', props.clickedItemId);
   // console.log('ModalConfirm clickedItemTitle = ', props.clickedItemTitle);
+
+  const condition = props.clickedItemId
+  // console.log('ModalConfirm condition = ', condition);
+
+  if (!condition) {
+    return (<>
+      <h1 className='text-2xl text-center'>все ?</h1>
+      <div className='flex m-4'>
+        <button
+          className='btn-primary'
+          onClick={props.removeHandlerAll}
+        > Yes
+        </button>
+      </div>
+    </>)
+  }
 
   return (
     <>
@@ -33,5 +50,6 @@ export const ModalConfirm = (props: ModalConfirmProps) => {
         </button>
       </div>
     </>
+
   )
 }

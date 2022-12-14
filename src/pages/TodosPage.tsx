@@ -59,9 +59,23 @@ export const TodosPage: React.FC = () => {
     close()
   }
 
+  const removeHandlerAll = () => {
+    setTodos([])
+    close()
+  }
+
+  const clickedDeleteAllBtn = () => {
+    console.log('clickedDeleteAllBtn !!!');
+    setclickedItemId(0)
+    setclickedItemTitle('')
+    open()
+  }
+
   // console.log(' TodosPage: clickedItem id =', clickedItemId);
   // console.log(' TodosPage: clickedItem title =', clickedItemTitle);
   // console.log(' TodosPage: Todos =', todos);
+  // console.log(' TodosPage: modal =', modal);
+  // console.log(' TodosPage: modalAll =', modalAll);
 
 
   //когда дел нет
@@ -82,8 +96,7 @@ export const TodosPage: React.FC = () => {
         <button
           className='btn-primary'
           onClick={() => {
-            console.log('click удалить все');
-            { setTodos([]) }
+            clickedDeleteAllBtn()
           }}
         > удалить все
         </button>
@@ -97,6 +110,7 @@ export const TodosPage: React.FC = () => {
           clickedItemId={clickedItemId}
           clickedItemTitle={clickedItemTitle}
           removeHandler={removeHandler}
+          removeHandlerAll={removeHandlerAll}
         />
       </Modal>}
 
